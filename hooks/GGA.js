@@ -60,7 +60,7 @@ Field Number:
 */
 
 function isEmpty(mixed) {
-  return ((typeof mixed !== 'string' && typeof mixed !== 'number') || (typeof mixed === 'string' && mixed.trim() === ''))
+  return (typeof mixed !== 'string' && typeof mixed !== 'number')
 }
 
 module.exports = function (input) {

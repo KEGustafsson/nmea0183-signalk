@@ -22,7 +22,7 @@ const utils = require('@signalk/nmea0183-utilities')
 var delta = {}
 
 function isEmpty(mixed) {
-  return ((typeof mixed !== 'string' && typeof mixed !== 'number') || (typeof mixed === 'string' && mixed.trim() === ''))
+  return (typeof mixed !== 'string' && typeof mixed !== 'number')
 }
 
 function parsePosition(line) {
