@@ -37,10 +37,16 @@ module.exports = function (input) {
         timestamp: tags.timestamp,
         values: [
           {
-            path: `propulsion.${
-              parts[0].toUpperCase() === 'S' ? 'shaft' : 'engine'
-            }_${parts[1]}.revolutions`,
-            value: utils.float(parts[2]) / 60,
+            path: `propulsion.${parts[1]}.source`,
+            value: parts[0]
+          },
+          {
+            path: `propulsion.${parts[1]}.revolutions`,
+            value: utils.float(parts[2]) / 60
+          },
+          {
+            path: `propulsion.${parts[1]}.pitch`,
+            value: utils.float(parts[3])
           },
         ],
       },
