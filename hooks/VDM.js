@@ -203,12 +203,8 @@ module.exports = function (input, session) {
 
   if (data.imo) {
     values.push({
-      path: '',
-      value: {
-        registrations: {
-          imo: `IMO ${data.imo}`,
-        },
-      },
+      path: 'registrations',
+      value: { imo: `IMO ${data.imo}` },
     })
   }
 
