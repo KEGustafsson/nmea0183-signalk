@@ -312,6 +312,14 @@ module.exports = function (input, session) {
     })
   }
 
+  if ((typeof data.dac == 1) && (typeof data.fid == 31)) {
+    contextPrefix = 'atons.'
+    values.push({
+      path: 'msg8',
+      value: sentence,
+    })
+  }
+  
   if (data.avgwindspd) {
     contextPrefix = 'atons.'
     if (data.avgwindspd < 127) {
@@ -319,7 +327,6 @@ module.exports = function (input, session) {
         path: 'environment.averageWindSpeed',
         value: utils.transform(data.avgwindspd, 'knots', 'ms'),
       })
-      console.log(sentence);
     } 
   }
 
@@ -330,7 +337,6 @@ module.exports = function (input, session) {
         path: 'environment.windGust',
         value: utils.transform(data.windgust, 'knots', 'ms'),
       })
-      console.log(sentence);
     }
   }
 
@@ -341,7 +347,6 @@ module.exports = function (input, session) {
         path: 'environment.windDirection',
         value: utils.transform(data.winddir, 'deg', 'rad'),
       })
-      console.log(sentence);
     }
   }
 
@@ -352,7 +357,6 @@ module.exports = function (input, session) {
         path: 'environment.windGustDirection',
         value: utils.transform(data.windgustdir, 'deg', 'rad'),
       })
-      console.log(sentence);
     }
   }
 
@@ -363,7 +367,6 @@ module.exports = function (input, session) {
         path: 'environment.airTemperature',
         value: utils.transform((data.airtemp / 10), 'c', 'k'),
       })
-      console.log(sentence);
     }
   }
 
@@ -374,7 +377,6 @@ module.exports = function (input, session) {
         path: 'environment.relativeHumidity',
         value: data.relhumid,
       })
-      console.log(sentence);
     }
   }
 
@@ -385,7 +387,6 @@ module.exports = function (input, session) {
         path: 'environment.dewPoint',
         value: utils.transform((data.dewpoint / 10), 'c', 'k'),
       })
-      console.log(sentence);
     }
   }
 
@@ -396,7 +397,6 @@ module.exports = function (input, session) {
         path: 'environment.airPressure',
         value: (data.airpress + 799) * 100,
       })
-      console.log(sentence);
     }
   }
 
@@ -406,7 +406,6 @@ module.exports = function (input, session) {
       path: 'environment.airPressureTendency',
       value: statusTable[data.airpressten],
     })
-    console.log(sentence);
   }
 
   if (data.horvisib) {
@@ -416,7 +415,6 @@ module.exports = function (input, session) {
         path: 'environment.horizontalVisibility',
         value: utils.transform((data.horvisib /10), 'nm', 'm'),
       })
-      console.log(sentence);
     }
   }
 
@@ -427,7 +425,6 @@ module.exports = function (input, session) {
         path: 'environment.waterLevel',
         value: (data.waterlevel / 100) - 10,
       })
-      console.log(sentence);
     }
   }
 
@@ -437,7 +434,6 @@ module.exports = function (input, session) {
       path: 'environment.waterLevelTrend',
       value: statusTable[data.waterlevelten],
     })
-    console.log(sentence);
   }
 
   if (data.surfcurrspd) {
@@ -447,7 +443,6 @@ module.exports = function (input, session) {
         path: 'environment.surfaceCurrentSpeed',
         value: utils.transform(data.surfcurrspd, 'knots', 'ms'),
       })
-      console.log(sentence);
     }
   }
 
@@ -458,7 +453,6 @@ module.exports = function (input, session) {
         path: 'environment.surfaceCurrentDirection',
         value: utils.transform(data.surfcurrdir, 'deg', 'rad'),
       })
-      console.log(sentence);
     }
   }
 
@@ -469,7 +463,6 @@ module.exports = function (input, session) {
         path: 'environment.significantWaveHeight',
         value: data.signwavewhgt / 10,
       })
-      console.log(sentence);
     }
   }
 
@@ -480,7 +473,6 @@ module.exports = function (input, session) {
         path: 'environment.wavePeriod',
         value: data.waveperiod,
       })
-      console.log(sentence);
     }
   }
 
@@ -491,7 +483,6 @@ module.exports = function (input, session) {
         path: 'environment.waveDirection',
         value: utils.transform(data.wavedir, 'deg', 'rad'),
       })
-      console.log(sentence);
     }
   }
 
@@ -502,7 +493,6 @@ module.exports = function (input, session) {
         path: 'environment.swellHeight',
         value: data.swellhgt / 10,
       })
-      console.log(sentence);
     }
   }
 
@@ -513,7 +503,6 @@ module.exports = function (input, session) {
         path: 'environment.swellPeriod',
         value: data.swellperiod,
       })
-      console.log(sentence);
     }
   }
 
@@ -524,7 +513,6 @@ module.exports = function (input, session) {
         path: 'environment.swellDirection',
         value: utils.transform(data.swelldir, 'deg', 'rad'),
       })
-      console.log(sentence);
     }
   }
 
@@ -534,7 +522,6 @@ module.exports = function (input, session) {
       path: 'environment.seaState',
       value: beaufortScale[data.seastate],
     })
-    console.log(sentence);
   }
 
   if (data.watertemp) {
@@ -544,7 +531,6 @@ module.exports = function (input, session) {
         path: 'environment.waterTemperature',
         value: utils.transform((data.watertemp / 10), 'c', 'k'),
       })
-      console.log(sentence);
     }
   }
 
@@ -554,7 +540,6 @@ module.exports = function (input, session) {
       path: 'environment.precipitation',
       value: precipitationType[data.precipitation],
     })
-    console.log(sentence);
   }
 
   if (data.salinity) {
@@ -564,7 +549,6 @@ module.exports = function (input, session) {
         path: 'environment.salinity',
         value: data.salinity / 10,
       })
-      console.log(sentence);
     }
   }
 
@@ -574,7 +558,6 @@ module.exports = function (input, session) {
       path: 'environment.ice',
       value: iceTable[data.ice],
     })
-    console.log(sentence);
   }
 
   if (values.length === 0) {
