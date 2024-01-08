@@ -318,7 +318,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.avgwindspd < 127) {
       values.push({
-        path: `environment.observations.air.windAverageSpeed`,
+        path: `environment.air.windAverageSpeed`,
         value: utils.transform(data.avgwindspd, 'knots', 'ms'),
       })
     } 
