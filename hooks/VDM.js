@@ -305,14 +305,20 @@ module.exports = function (input, session) {
   }
 
   if (data.lon && data.lat) {
-    meteoLocation = data.lon.toString().replace('.', '_') + "__" + data.lat.toString().replace('.', '_')
+    values.push({
+      path: 'navigation.position',
+      value: {
+        longitude: data.lon,
+        latitude: data.lat,
+      },
+    })
   }
 
   if (data.avgwindspd) {
     contextPrefix = 'meteo.'
     if (data.avgwindspd < 127) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.windAverageSpeed`,
+        path: `environment.air.windAverageSpeed`,
         value: utils.transform(data.avgwindspd, 'knots', 'ms'),
       })
     } 
@@ -322,7 +328,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.windgust < 127) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.windGust`,
+        path: `environment.air.windGust`,
         value: utils.transform(data.windgust, 'knots', 'ms'),
       })
     }
@@ -332,7 +338,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.winddir < 360) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.windDirection`,
+        path: `environment.air.windDirection`,
         value: utils.transform(data.winddir, 'deg', 'rad'),
       })
     }
@@ -342,7 +348,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.windgustdir < 360) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.windGustDirection`,
+        path: `environment.air.windGustDirection`,
         value: utils.transform(data.windgustdir, 'deg', 'rad'),
       })
     }
@@ -352,7 +358,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.airtemp > -601 && data.airtemp < 601) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.temperature`,
+        path: `environment.air.temperature`,
         value: utils.transform((data.airtemp / 10), 'c', 'k'),
       })
     }
@@ -362,7 +368,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.relhumid < 101) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.relativeHumidity`,
+        path: `environment.air.relativeHumidity`,
         value: data.relhumid,
       })
     }
@@ -372,7 +378,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.dewpoint > -201 && data.dewpoint < 501) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.dewPoint`,
+        path: `environment.air.dewPoint`,
         value: utils.transform((data.dewpoint / 10), 'c', 'k'),
       })
     }
@@ -382,7 +388,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.airpress < 403) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.pressure`,
+        path: `environment.air.pressure`,
         value: (data.airpress + 799) * 100,
       })
     }
@@ -392,7 +398,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.airpressten < 3) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.pressureTendency`,
+        path: `environment.air.pressureTendency`,
         value: statusTable[data.airpressten],
       })
     }
@@ -402,7 +408,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.horvisib < 127) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.horizontalVisibility`,
+        path: `environment.air.horizontalVisibility`,
         value: utils.transform((data.horvisib / 10), 'nm', 'm'),
       })
     }
@@ -412,7 +418,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.waterlevel < 4001) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.level`,
+        path: `environment.water.level`,
         value: (data.waterlevel / 100) - 10,
       })
     }
@@ -422,7 +428,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.waterlevelten < 3) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.levelTrend`,
+        path: `environment.water.levelTrend`,
         value: statusTable[data.waterlevelten],
       })
     }
@@ -432,7 +438,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.surfcurrspd < 252) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.surfaceCurrentSpeed`,
+        path: `environment.water.surfaceCurrentSpeed`,
         value: utils.transform((data.surfcurrspd / 10), 'knots', 'ms'),
       })
     }
@@ -442,7 +448,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.surfcurrdir < 360) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.surfaceCurrentDirection`,
+        path: `environment.water.surfaceCurrentDirection`,
         value: utils.transform(data.surfcurrdir, 'deg', 'rad'),
       })
     }
@@ -452,7 +458,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.signwavewhgt < 252) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.waveSignificantHeight`,
+        path: `environment.water.waveSignificantHeight`,
         value: data.signwavewhgt / 10,
       })
     }
@@ -462,7 +468,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.waveperiod < 61) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.wavePeriod`,
+        path: `environment.water.wavePeriod`,
         value: data.waveperiod,
       })
     }
@@ -472,7 +478,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.wavedir < 360) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.waveDirection`,
+        path: `environment.water.waveDirection`,
         value: utils.transform(data.wavedir, 'deg', 'rad'),
       })
     }
@@ -482,7 +488,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.swellhgt < 252) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.swellHeight`,
+        path: `environment.water.swellHeight`,
         value: data.swellhgt / 10,
       })
     }
@@ -492,7 +498,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.swellperiod < 61) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.swellPeriod`,
+        path: `environment.water.swellPeriod`,
         value: data.swellperiod,
       })
     }
@@ -502,7 +508,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.swelldir < 360) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.swellDirection`,
+        path: `environment.water.swellDirection`,
         value: utils.transform(data.swelldir, 'deg', 'rad'),
       })
     }
@@ -512,7 +518,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.seastate < 13) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.seaState`,
+        path: `environment.water.seaState`,
         value: beaufortScale[data.seastate],
       })
     }
@@ -522,7 +528,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.watertemp > -101 && data.watertemp < 501) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.temperature`,
+        path: `environment.water.temperature`,
         value: utils.transform((data.watertemp / 10), 'c', 'k'),
       })
     }
@@ -532,7 +538,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.precipitation < 7) {
       values.push({
-        path: `environment.observations.${meteoLocation}.air.precipitation`,
+        path: `environment.air.precipitation`,
         value: precipitationType[data.precipitation],
       })
     }
@@ -542,7 +548,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.salinity < 502) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.salinity`,
+        path: `environment.water.salinity`,
         value: data.salinity / 10,
       })
     }
@@ -552,7 +558,7 @@ module.exports = function (input, session) {
     contextPrefix = 'meteo.'
     if (data.ice < 3) {
       values.push({
-        path: `environment.observations.${meteoLocation}.water.ice`,
+        path: `environment.water.ice`,
         value: iceTable[data.ice],
       })
     }
@@ -562,46 +568,25 @@ module.exports = function (input, session) {
     return null
   }
 
+  let latPart, lonPart, context;
+
   if (contextPrefix === 'meteo.'){
-    if (data.lon && data.lat) {
-      values.push({
-        path: `environment.observations.${meteoLocation}`,
-        value: {
-          longitude: data.lon,
-          latitude: data.lat,
-        },
-      })
-    }
-    delta = {
-      context: contextPrefix + `urn:mrn:imo:mmsi:${data.mmsi}`,
-      updates: [
-        {
-          $source: `location__${data.lat}__${data.lon}`,
-          timestamp: tags.timestamp,
-          values: values,
-        },
-      ],
-    }
+    latPart = ("00" + (data.lat % 1).toFixed(3).slice(-3)).slice(-3);
+    lonPart = ("00" + (data.lon % 1).toFixed(3).slice(-3)).slice(-3);
+    context = contextPrefix + `urn:mrn:imo:mmsi:${data.mmsi}:` + latPart + lonPart;
   } else {
-    if (data.lon && data.lat) {
-      values.push({
-        path: 'navigation.position',
-        value: {
-          longitude: data.lon,
-          latitude: data.lat,
-        },
-      })
-    }
-    delta = {
-      context: contextPrefix + `urn:mrn:imo:mmsi:${data.mmsi}`,
-      updates: [
-        {
-          source: tags.source,
-          timestamp: tags.timestamp,
-          values: values,
-        },
-      ],
-    }
+    context = contextPrefix + `urn:mrn:imo:mmsi:${data.mmsi}`;
+  }
+
+  delta = {
+    context: context,
+    updates: [
+      {
+        source: tags.source,
+        timestamp: tags.timestamp,
+        values: values,
+      },
+    ],
   }
 
   return delta
