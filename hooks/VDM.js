@@ -520,7 +520,7 @@ module.exports = function (input, session) {
   }
 
   delta = {
-    context: contextPrefix + `urn:mrn:imo:mmsi:${data.mmsikey}`,
+    context: contextPrefix + `urn:mrn:imo:mmsi:${data.mmsikey || data.mmsi}`,
     updates: [
       {
         source: tags.source,
