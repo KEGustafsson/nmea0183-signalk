@@ -519,18 +519,8 @@ module.exports = function (input, session) {
     return null
   }
 
-  let latPart, lonPart, context;
-
-  if (contextPrefix === 'meteo.'){
-    latPart = ("00" + (data.lat % 1).toFixed(3).slice(-3)).slice(-3);
-    lonPart = ("00" + (data.lon % 1).toFixed(3).slice(-3)).slice(-3);
-    context = contextPrefix + `urn:mrn:imo:mmsi:${data.mmsi}:` + latPart + lonPart;
-  } else {
-    context = contextPrefix + `urn:mrn:imo:mmsi:${data.mmsi}`;
-  }
-
   delta = {
-    context: context,
+    context: contextPrefix + `urn:mrn:imo:mmsi:${data.mmsikey}`,
     updates: [
       {
         source: tags.source,
