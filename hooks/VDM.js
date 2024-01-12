@@ -518,12 +518,6 @@ module.exports = function (input, session) {
   if (values.length === 0) {
     return null
   }
-
-  if (contextPrefix === 'meteo.') {
-    const latPart = ("00" + (data.lat % 1).toFixed(3).slice(-3)).slice(-3);
-    const lonPart = ("00" + (data.lon % 1).toFixed(3).slice(-3)).slice(-3);
-    data.mmsikey = data.mmsi + `:` + latPart + lonPart;
-  }
   
   delta = {
     context: contextPrefix + `urn:mrn:imo:mmsi:${data.mmsikey || data.mmsi}`,
