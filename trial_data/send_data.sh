@@ -1,13 +1,13 @@
 #!/bin/bash
 
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <input_file> <destination_host> <destination_port>"
+if [ "$#" -ne 4 ]; then
+    echo "Usage: $0 <data_rate> <input_file> <destination_host> <destination_port>"
     exit 1
 fi
 
-input_file="$1"
-destination_host="$2"
-destination_port="$3"
+data_rate="$1"
+input_file="$2"
+destination_host="$3"
+destination_port="$4"
 
-pv --rate-limit 10k "$input_file" | nc -u "$destination_host" "$destination_port"
-
+pv --rate-limit "$data_rate" "$input_file" | nc -u "$destination_host" "$destination_port"
