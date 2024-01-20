@@ -319,7 +319,7 @@ module.exports = function (input, session) {
     })
   }
 
-  [
+  const weather = [
     ['avgwindspd', 'wind.averageSpeed', knotsToMs],
     ['windgust', 'wind.gust', knotsToMs],
     ['winddir', 'wind.directionTrue', degToRad],
@@ -337,7 +337,8 @@ module.exports = function (input, session) {
     ['swelldir', 'water.swell.directionTrue', degToRad],
     ['watertemp', 'water.temperature', cToK],
     ['salinity', 'water.salinity', (v) => v],
-  ].forEach(([propName, path, f]) => {
+  ]
+  weather.forEach(([propName, path, f]) => {
     if (data[propName] !== undefined) {
       contextPrefix = 'meteo.'
       values.push({
@@ -347,25 +348,27 @@ module.exports = function (input, session) {
     }
   })
 
-  [
-    { key: 'ice', path: 'environment.observations.water', table: iceTable },
-    { key: 'precipitation', path: 'environment.observations.outside', table: precipitationType },
-    { key: 'seastate', path: 'environment.observations.water', table: beaufortScale },
-    { key: 'waterlevelten', path: 'environment.observations.waterlevel', table: statusTable },
-    { key: 'airpressten', path: 'environment.observations.pressure', table: statusTable },
-    { key: 'horvisib', path: 'environment.observations.visibility', transform: (v) => nmTom },
-    { key: 'utcday', path: 'environment.observations.date' },
-  ].forEach(({ key, path, transform, table }) => {
-    if (data[key] !== undefined) {
+  const weatherTable = [
+    ['ice', 'water.ice', iceTable],
+    ['precipitation', 'outside.precipitation', precipitationType],
+    ['seastate', 'water.seastate', beaufortScale],
+    ['waterlevelten', 'water.levelTendency', statusTable],
+    ['airpressten', 'outside.pressureTendency', statusTable],
+  ]
+  weatherTable.forEach(([propName, path, f]) => {
+    if (data[propName] !== undefined) {
       contextPrefix = 'meteo.'
-      const comment = table ? table[data[key]] : undefined;
-      const finalValue = transform ? transform(data[key]) : data[key];
+        const comment = f[data[propName]]
+        const value = data[propName]
       values.push({
-        path: path,
-        value: { [key]: finalValue, comment },
-      });
+        path: `environment.observation.` + path,
+        value: {
+          value,
+          comment,
+        }
+      })
     }
-  });
+  })
 
   if (data.surfcurrspd !== undefined || data.surfcurrdir !== undefined) {
     contextPrefix = 'meteo.'
@@ -376,6 +379,34 @@ module.exports = function (input, session) {
       value: {
         set,
         drift,
+      },
+    })
+  }
+
+  if (data.horvisib !== undefined && data.horvisibrange !== undefined) {
+    contextPrefix = 'meteo.'
+    const value = utils.transform(data.horvisib, 'nm', 'm')
+    const comment = data.horvisibrange
+    values.push({
+      path: 'environment.observations.horizontalVisibility',
+      value: {
+        value,
+        comment,
+      },
+    })
+  }
+
+  if (data.utcday !== undefined && data.utchour !== undefined && data.utcminute !== undefined) {
+    contextPrefix = 'meteo.'
+    const utcday = data.utcday
+    const utchour = data.utchour
+    const utcminute = data.utcminute
+    values.push({
+      path: 'environment.observations.date',
+      value: {
+        utcday,
+        utchour,
+        utcminute,
       },
     })
   }
