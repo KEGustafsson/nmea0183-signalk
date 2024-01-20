@@ -319,7 +319,7 @@ module.exports = function (input, session) {
     })
   }
 
-  const weather = [
+  [
     ['avgwindspd', 'wind.averageSpeed', knotsToMs],
     ['windgust', 'wind.gust', knotsToMs],
     ['winddir', 'wind.directionTrue', degToRad],
@@ -337,8 +337,7 @@ module.exports = function (input, session) {
     ['swelldir', 'water.swell.directionTrue', degToRad],
     ['watertemp', 'water.temperature', cToK],
     ['salinity', 'water.salinity', (v) => v],
-  ]
-  weather.forEach(([propName, path, f]) => {
+  ].forEach(([propName, path, f]) => {
     if (data[propName] !== undefined) {
       contextPrefix = 'meteo.'
       values.push({
@@ -346,16 +345,15 @@ module.exports = function (input, session) {
         value: f(data[propName]),
       })
     }
-  })
+  });
 
-  const weatherTable = [
+  [
     ['ice', 'water.ice', iceTable],
     ['precipitation', 'outside.precipitation', precipitationType],
     ['seastate', 'water.seastate', beaufortScale],
     ['waterlevelten', 'water.levelTendency', statusTable],
     ['airpressten', 'outside.pressureTendency', statusTable],
-  ]
-  weatherTable.forEach(([propName, path, f]) => {
+  ].forEach(([propName, path, f]) => {
     if (data[propName] !== undefined) {
       contextPrefix = 'meteo.'
         const comment = f[data[propName]]
@@ -368,7 +366,7 @@ module.exports = function (input, session) {
         }
       })
     }
-  })
+  });
 
   if (data.surfcurrspd !== undefined || data.surfcurrdir !== undefined) {
     contextPrefix = 'meteo.'
